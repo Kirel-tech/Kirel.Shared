@@ -28,13 +28,16 @@ public class PredicateBuilder
     /// Class implements a keyword search
     /// </summary>
     /// <param name="keyword">Searching keyword</param>
+    /// <param name="virtualProperties">Search in virtual properties flag</param>
     /// <typeparam name="T">Entity type</typeparam>
     /// <returns>Expression</returns>
-    public static Expression<Func<T, bool>> PredicateSearchInAllFields<T>(string keyword)
+    public static Expression<Func<T, bool>> PredicateSearchInAllFields<T>(string keyword, bool virtualProperties = false)
     {
         var predicate = False<T>();
-        var properties = typeof(T).GetProperties();
-        foreach (var propertyInfo in properties.Where(p => p.GetGetMethod()?.IsVirtual is false))
+        var properties = typeof(T).GetProperties().AsEnumerable();
+        if (!virtualProperties)
+            properties = properties.Where(p => p.GetGetMethod()?.IsVirtual is false);
+        foreach (var propertyInfo in properties)
         {
             var parameter = Expression.Parameter(typeof(T), "x");
             var property = Expression.Property(parameter, propertyInfo);
@@ -42,7 +45,9 @@ public class PredicateBuilder
             var nullCheck = Expression.NotEqual(propertyAsObject, Expression.Constant(null, typeof(object)));
             var propertyAsString = Expression.Call(property, "ToString", null, null);
             var keywordExpression = Expression.Constant(keyword);
-            var contains = propertyInfo.PropertyType == typeof(string) ? Expression.Call(property, "Contains", null, keywordExpression) : Expression.Call(propertyAsString, "Contains", null, keywordExpression);
+            var contains = propertyInfo.PropertyType == typeof(string) ? 
+                Expression.Call(property, "Contains", null, keywordExpression) : 
+                Expression.Call(propertyAsString, "Contains", null, keywordExpression);
             var lambda = Expression.Lambda(Expression.AndAlso(nullCheck, contains), parameter);
             predicate = Or(predicate, (Expression<Func<T, bool>>)lambda);
         }
