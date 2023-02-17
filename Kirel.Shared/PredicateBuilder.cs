@@ -33,6 +33,8 @@ public class PredicateBuilder
     /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> PredicateSearchInAllFields<T>(string keyword, bool virtualProperties = false)
     {
+        if (string.IsNullOrEmpty(keyword))
+            return True<T>();
         var predicate = False<T>();
         var properties = typeof(T).GetProperties().AsEnumerable();
         if (!virtualProperties)
