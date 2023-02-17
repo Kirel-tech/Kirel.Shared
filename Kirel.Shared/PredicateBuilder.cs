@@ -60,14 +60,18 @@ public class PredicateBuilder
     /// Wrapping in a new lambda expression
     /// </summary>
     /// <param name="propertyName">Property name</param>
+    /// <param name="includeVirtual">Search in virtual properties flag</param>
     /// <typeparam name="T">Class type</typeparam>
     /// <returns>Expression</returns>
-    public static Expression<Func<T, object>>? ToLambda<T>(string propertyName)
+    public static Expression<Func<T, object>>? ToLambda<T>(string? propertyName, bool includeVirtual = true)
     {
-        // if (typeof(T)
-        //     .GetProperties().Any(p => p.GetGetMethod()?.IsVirtual is false &&
-        //                               p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)))
-        //     return null;
+        if (!includeVirtual && typeof(T)
+            .GetProperties().Any(p => p.GetGetMethod()?.IsVirtual is false &&
+                                      p.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)))
+            return null;
+
+        if (string.IsNullOrWhiteSpace(propertyName))
+            return null;
         
         var parameter = Expression.Parameter(typeof(T));
         var property = Expression.Property(parameter, propertyName);
