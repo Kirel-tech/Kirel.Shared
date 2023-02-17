@@ -9,7 +9,7 @@ public class PredicateBuilder
     /// <summary>
     /// Method for creating an Expression that initially evaluates true
     /// </summary>
-    /// <typeparam name="T">Entity type</typeparam>
+    /// <typeparam name="T">Class type</typeparam>
     /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> True<T>()
     {
@@ -18,7 +18,7 @@ public class PredicateBuilder
     /// <summary>
     /// Method for creating an Expression that initially evaluates true
     /// </summary>
-    /// <typeparam name="T">Entity type</typeparam>
+    /// <typeparam name="T">Class type</typeparam>
     /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> False<T>()
     {
@@ -29,7 +29,7 @@ public class PredicateBuilder
     /// </summary>
     /// <param name="keyword">Searching keyword</param>
     /// <param name="virtualProperties">Search in virtual properties flag</param>
-    /// <typeparam name="T">Entity type</typeparam>
+    /// <typeparam name="T">Class type</typeparam>
     /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> PredicateSearchInAllFields<T>(string keyword, bool virtualProperties = false)
     {
@@ -58,7 +58,7 @@ public class PredicateBuilder
     /// Wrapping in a new lambda expression
     /// </summary>
     /// <param name="propertyName">Property name</param>
-    /// <typeparam name="T">Entity type</typeparam>
+    /// <typeparam name="T">Class type</typeparam>
     /// <returns>Expression</returns>
     public static Expression<Func<T, object>>? ToLambda<T>(string propertyName)
     {
@@ -78,7 +78,7 @@ public class PredicateBuilder
     /// </summary>
     /// <param name="expr1">First expression</param>
     /// <param name="expr2">Second expression</param>
-    /// <typeparam name="T">Entity type</typeparam>
+    /// <typeparam name="T">Class type</typeparam>
     /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> Or<T>(Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
     {
@@ -90,7 +90,7 @@ public class PredicateBuilder
     /// </summary>
     /// <param name="expr1">First expression</param>
     /// <param name="expr2">Second expression</param>
-    /// <typeparam name="T">Entity type</typeparam>
+    /// <typeparam name="T">Class type</typeparam>
     /// <returns>Expression</returns>
     public static Expression<Func<T, bool>> And<T>(Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
     {
