@@ -28,16 +28,16 @@ public class PredicateBuilder
     /// Class implements a keyword search
     /// </summary>
     /// <param name="keyword">Searching keyword</param>
-    /// <param name="virtualProperties">Search in virtual properties flag</param>
+    /// <param name="includeVirtual">Search in virtual properties flag</param>
     /// <typeparam name="T">Class type</typeparam>
     /// <returns>Expression</returns>
-    public static Expression<Func<T, bool>> PredicateSearchInAllFields<T>(string keyword, bool virtualProperties = false)
+    public static Expression<Func<T, bool>> PredicateSearchInAllFields<T>(string? keyword, bool includeVirtual = false)
     {
         if (string.IsNullOrEmpty(keyword))
             return True<T>();
         var predicate = False<T>();
         var properties = typeof(T).GetProperties().AsEnumerable();
-        if (!virtualProperties)
+        if (!includeVirtual)
             properties = properties.Where(p => p.GetGetMethod()?.IsVirtual is false);
         foreach (var propertyInfo in properties)
         {
